@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "../../src/lifecycle/attributes.h"
+#include "../../src/lifecycle/cancellation.h"
 
 Suite *lifecycle_suite(void);
 
