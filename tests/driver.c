@@ -1,37 +1,56 @@
+#include "driver.h"
+
+#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/resource.h>
 
-#include "driver.h"
+#include "test_lifecycle/test_lifecycle.h"
 
-static Suite *
-calculations_suite(void)
-{
-	Suite *s = NULL;
-	TCase *tc_core = NULL;
+// in order to be able to run the program with setting scheduling requests
+// you need to interact with the system by setting limits
+static int setup_environment(void) {
+  struct rlimit r;
 
-	s = suite_create("calculation");
-	tc_core = tcase_create("core");
+  r.rlim_max = 50;
+  r.rlim_cur = 20;
 
-        suite_add_tcase(s, tc_core);
-
-	return s;
+  return setrlimit(RLIMIT_RTPRIO, &r);
 }
 
-int
-main(void)
-{
+int main(void) {
+  int no_failed = 0;
+  Suite *s = NULL;
+  SRunner *runner = NULL;
 
-	int no_failed = 0;
-	Suite *s = NULL;
-	SRunner *runner = NULL;
+  if (setup_environment() == -1) {
+    switch (errno) {
+      case EFAULT:
+        strerror(errno);
+        break;
+      case EINVAL:
+        strerror(errno);
+        break;
+      case EPERM:
+        fprintf(stderr, "%s \n", strerror(errno));
+        break;
+      case ESRCH:
+        strerror(errno);
+        break;
+      default:
+        break;
+    }
+  }
 
-	s = calculations_suite();
-	runner = srunner_create(s);
+  s = lifecycle_suite();
+  runner = srunner_create(s);
 
-	srunner_run_all(runner, CK_NORMAL);
-	no_failed = srunner_ntests_failed(runner);
-	srunner_free(runner);
+  srunner_run_all(runner, CK_NORMAL);
+  no_failed = srunner_ntests_failed(runner);
+  srunner_free(runner);
 
-	return (no_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+  return (no_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

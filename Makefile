@@ -1,7 +1,7 @@
 CXX := $(shell which clang)
 
 # just a clean way to distinguish the two deployment environments
-DEVELOPMENT_FLAGS := -g -Weverything -gdwarf-4 -fPIC
+DEVELOPMENT_FLAGS := -pthread -g -Weverything -gdwarf-4 -fPIC
 PRODUCTION_FLAGS := -O3 -fPIC
 
 ifeq "$(DEPLOYMENT)" "production"
@@ -33,7 +33,7 @@ NAME_OF_THE_OBJECTS_OF_THE_TESTS := temp_test_obj_directory
 OBJECT_FILES_OF_TESTS_WITHOUT_PREFIX := $(patsubst %$(SOURCE_FILES_SUFFIX),%$(OBJECT_SUFFIX),$(patsubst %$(HEADER_SUFFIX),%$(OBJECT_SUFFIX),$(shell find $(RELATIVE_TESTS_FOLDER_PATH) -type f -name "*$(HEADER_SUFFIX)")))
 OBJECT_FILES_OF_TESTS_WITH_PREFIX := $(foreach F,$(OBJECT_FILES_OF_TESTS_WITHOUT_PREFIX),$(lastword $(subst $(RELATIVE_TESTS_FOLDER_PATH), ,$F)))
 TEST_OBJECTS :=$(addprefix $(NAME_OF_THE_OBJECTS_OF_THE_TESTS)/, $(OBJECT_FILES_OF_TESTS_WITH_PREFIX))
-LIBS := -lsubunit -lm -lcheck -lpthread $(NAME_OF_THE_LIBRARY)
+LIBS := -lsubunit -lm -lcheck $(NAME_OF_THE_LIBRARY)
 
 MEM_CHECK_FILE := valgrind_results.txt
 
@@ -74,4 +74,4 @@ clean:
 	rm -rf $(NAME_OF_THE_OBJECTS_OF_THE_LIBRARY) $(NAME_OF_THE_OBJECTS_OF_THE_TESTS)
 
 memory_check: test
-	valgrind -s --leak-check=full --show-leak-kinds=all --leak-resolution=med --track-origins=yes --verbose --log-file=$(MEM_CHECK_FILE) ./$(NAME_OF_TEST_EXECUTABLE)
+	sudo env "LD_LIBRARY_PATH=$(pwd):$(LD_LIBRARY_PATH)" valgrind -s --leak-check=full --show-leak-kinds=all --leak-resolution=med --track-origins=yes --verbose --log-file=$(MEM_CHECK_FILE) ./$(NAME_OF_TEST_EXECUTABLE)
