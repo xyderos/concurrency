@@ -46,12 +46,42 @@ Since __multiple processes can be run by multiple users within a system, they ca
 
 This can be eg __memory map, the cpu state that contains priorities, registers, signal mask, kernel stack etc as well as file descriptors with signal dispatches__
 
-You might see that a thread is often called a __light weight process__ because the kernel essentially treats threads as processes that share some stuff (the ones mentioned above)
+You might see that a thread is often called a __light weight process__ because the kernel essentially treats threads as processes that share some stuff (the ones mentioned above), think of it as a virtual CPU that is ready to execute a task
 
 * __Thread is a user level term__
 * __Light weight process is a kernel level term__
 * When creating new processes, __the fork()__ function is used 
 * Whereas when creating the corresponding threads, __clone()__ is used
+
+Since we schedule __threads and not processes__, a process with two threads will use twice as much resources as one with a single thread, and __each thread holds its state__
+
+Threads also have some special characteristics bounded to them based on their __capabilities__ eg _scheduling requests_
+
+__This produces kernel level concurrency__ and most of the stuff should remain __unchanged__, every change of those might cost you either __performace or portability__
+
+#### __Context switching__
+
+When two processes perform context switch, the kernel:
+
+1) __Saves the registers__
+2) __Changes the virtual memory pointers__
+3) __Loads the registers from the other process__
+4) __continues execution__
+
+Threads __only require a subset of the registers to be changed in order to perform a context switch__ (remember the term _virtual cpus_ from above)
+
+In particular:
+
+* Stack
+* Stack Pointer
+* Program Counter
+* Thread info included in the __thread structure__ eg scheduling priority, signal masks
+* and the CPU registers, Stack pointer and Program Counter are actuall just __registers__
+* All the rest comes from __the process__ (_remember that the process structure is something that you cant change, it strictly resides on the kernel space_)
+
+There is an implicit problem that arises, since you are sharing a lot of stuff from the __process view__, you introduce bugs within synchnronization and scheduling, eg if a thread is reading from a file, this is is internally using the _file position pointer_, so if two threads try to read without synchronization from a file __you will not have a deterministic behaviour__
+
+_Note, the stack is actually part of the main programs heap_
 
 ### __Threads__
 
