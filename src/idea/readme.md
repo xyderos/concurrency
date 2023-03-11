@@ -40,6 +40,19 @@ The OS needs to maintain data of each __process__ which defines the __process st
 
 Since __multiple processes can be run by multiple users within a system, they can directly access one anothers memory if there is a Shared Memory Segment__
 
+### __Process and thread structure__
+
+* Essentially, the only thing kernel knows about the program is the __process structure__
+
+This can be eg __memory map, the cpu state that contains priorities, registers, signal mask, kernel stack etc as well as file descriptors with signal dispatches__
+
+You might see that a thread is often called a __light weight process__ because the kernel essentially treats threads as processes that share some stuff (the ones mentioned above)
+
+* __Thread is a user level term__
+* __Light weight process is a kernel level term__
+* When creating new processes, __the fork()__ function is used 
+* Whereas when creating the corresponding threads, __clone()__ is used
+
 ### __Threads__
 
 Just like an operating system can run multiple processes, __processes do the same by running more than one thread__
