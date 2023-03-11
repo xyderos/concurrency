@@ -75,6 +75,8 @@ Should you pass any arguments to the thread routine, you need to initalize the _
 
 #### __A few practical notes on setting up threads policies in Linux and subsequently POSIX environments__
 
+* Do not use functions that use either __internal static buffers or signals with threads, a failure of something can lead to a race condition__
+
 * If you are planning on setting up __scheduling policies and scope__, you need to modify the __resource limits__ given to your __thread__
 
 * Use __setrlimit__ and yer needed capability appropriately

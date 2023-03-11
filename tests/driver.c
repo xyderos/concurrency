@@ -1,6 +1,7 @@
 #include "driver.h"
 
 #include <asm-generic/errno-base.h>
+#include <check.h>
 #include <errno.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -45,8 +46,8 @@ int main(void) {
     }
   }
 
-  s = lifecycle_suite();
   runner = srunner_create(s);
+  srunner_add_suite(runner, lifecycle_suite());
 
   srunner_run_all(runner, CK_NORMAL);
   no_failed = srunner_ntests_failed(runner);
