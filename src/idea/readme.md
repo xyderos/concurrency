@@ -118,6 +118,73 @@ Threads interact with the kernel in various ways:
 3) __Synchronization__, __mechanisms that coordinate multiple threads__
 4) __Scheduling__, place threads into the CPU.
 
+### __System calls__
+
+__Get information or request services from the kernel__
+
+Can either be
+
+1) #### __Blocking__ or __synchronous__, meaning that
+
+* You request a service
+* __The kernel executes it__
+* The program continues 
+
+_If the blocking call takes a long time the program waits for it and usually another process will also be scheduled_
+
+2) #### __Non blocking__ or __asynchronous__, meaning that
+
+* You request a service
+* __The kernel sets up the parameters for the operation__
+* The program continues
+* _The program will keep running, when it will be done is not of interest for now_
+* __The kernel will send a signal to the process indicating that it is done__
+
+#### __Workflow__
+
+1) __The process traps the kernel__
+2) The _trap handler_ runs in __kernel mode__ and __saves all the registers__
+3) Sets the __stack pointer__ to the __process structure kernel stack__
+4) __The kernel runs the system call__
+5) The kernel places any requested data into the __user space structure__ that the user provided
+6) The kernel __changes any process structure values affected__
+7) __The process returns to user mode__, replacing the __registers and the stack pointer__ and returns __the appropriate value for the system call__
+
+They can
+
+1) __either fail__ and if so, they will set __errno__ to the appropriate __error value signal__
+2) __or be interrupted by a signal__, in which case the call is forced __out of the kernel__ and the signal handler is run
+
+_Note that in the latter case, the system calls __EINTR__, so it is your responsibility to act accordingly_
+
+It is super cool to have multiple, independent threads running __blocking calls__, ones that cannot interact with each other since you might be falling into __data race conditions__, and still all the other threads can execute
+
+### __Signals__
+
+__Mechanism that coordinates asynchronous behavior in a program__
+
+* Something, __either another process or the kernel send a signal to your process__
+* The kernel _stops the process it does__ and forces it to __run something else__
+
+After that, you program will
+
+1) __Either resume from where it left off__
+2) __Or it can do a siglongjmp() and your program will continue from where the sigsetjmp() was located__
+3) Or even __exit__
+
+#### __Workflow__
+
+1) The program will call __sigaction__ to declare a function to be the __handler__ or the __callback__ for a given signal
+2) The kernel will put a pointer to that handler __into the process strucutres signal dispatch table__
+3) Your program will can __sigprocmask__ to inform the kernel __which signals it is willing to accept__
+4) Your program starts executing, doing whatever you instructed it to do so
+
+When a process __signals your process with the desired signals__,
+
+5) __Your program will stop what is doing and will run the handler you wrote for this signal__
+6) Again, your program can be doing whatever and will be __interupted__, thats the nice thing with signals, they are completely __asynchronous__
+7) When the __callback is done__, it jumps back to your program and continues as if nothing happened 
+
 ### __Know how__
 
 In general, you can thread programs that should execute stuff independently, a lot of workers doing a lot of things. Examples are:
