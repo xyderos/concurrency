@@ -12,6 +12,7 @@
 #include "test_lifecycle/test_lifecycle.h"
 #include "test_synchronization/test_barrier_based_matrix_sum/test_barrier_based_matrix_sum.h"
 #include "test_synchronization/test_coordinate_based_matrix_sum/test_coordinate_based_matrix_sum.h"
+#include "test_synchronization/test_row_based_matrix_sum/test_row_based_matrix_sum.h"
 
 // in order to be able to run the program with setting scheduling requests
 // you need to interact with the system by setting limits
@@ -52,6 +53,7 @@ int main(void) {
   srunner_add_suite(runner, lifecycle_suite());
   srunner_add_suite(runner, barrier_suite());
   srunner_add_suite(runner, coordinate_suite());
+  srunner_add_suite(runner, row_suite());
 
   srunner_run_all(runner, CK_NORMAL);
   no_failed = srunner_ntests_failed(runner);
