@@ -1,4 +1,4 @@
-#include "barrier.h"
+#include "coordinate.h"
 
 #include <pthread.h>
 #include <stdio.h>
@@ -50,6 +50,8 @@ int coordinate_based_matrix_sum(void) {
   for (l = 0; l < number_of_workers; l++) {
     pthread_create(&workerid[l], &attr, worker, (void *)l);
   }
+
+  // wait for all the threads to finish the actual work
   for (l = 0; l < number_of_workers; l++) {
     pthread_join(workerid[l], NULL);
   }
@@ -68,6 +70,9 @@ void *worker(void *arg) {
 
   for (i = first; i <= last; i++) {
     for (j = 0; j < matrix_size; j++) {
+      // need to double check because of race conditions
+      // we might have been swapped from running and the actual value might have
+      // been changed
       if (matrix[i][j] > maximum) {
         pthread_mutex_lock(&maximum_lock);
         if (matrix[i][j] > maximum) {
