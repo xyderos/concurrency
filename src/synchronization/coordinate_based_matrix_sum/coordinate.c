@@ -10,7 +10,7 @@
 static const unsigned int strip_size = matrix_size / number_of_workers;
 
 void barrier(void);
-void *worker(void *arg);
+void *coordinate_worker(void *arg);
 
 static pthread_cond_t conditional;
 
@@ -48,7 +48,7 @@ int coordinate_based_matrix_sum(void) {
   }
 
   for (l = 0; l < number_of_workers; l++) {
-    pthread_create(&workerid[l], &attr, worker, (void *)l);
+    pthread_create(&workerid[l], &attr, coordinate_worker, (void *)l);
   }
 
   // wait for all the threads to finish the actual work
@@ -59,7 +59,7 @@ int coordinate_based_matrix_sum(void) {
   pthread_exit(EXIT_SUCCESS);
 }
 
-void *worker(void *arg) {
+void *coordinate_worker(void *arg) {
   unsigned long myid = (unsigned long)arg, first = 0, last = 0, i = 0, j = 0,
                 total = 0;
 
