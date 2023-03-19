@@ -1,17 +1,19 @@
-#include "test_coordinate_based_matrix_sum.h"
-
 #include <check.h>
 
-Suite *coordinate_suite(void) {
-  Suite *s = NULL;
-  TCase *tc_core = NULL;
+#include "test_coordinate_based_matrix_sum.h"
 
-  s = suite_create("coordinate");
-  tc_core = tcase_create("core");
+Suite *
+coordinate_suite(void)
+{
+	Suite *s = NULL;
+	TCase *tc_core = NULL;
 
-  tcase_add_test(tc_core, TEST_COORDINATE_SHOULD_BE_OKAY);
+	s = suite_create("coordinate");
+	tc_core = tcase_create("core");
 
-  suite_add_tcase(s, tc_core);
+	tcase_add_test(tc_core, TEST_COORDINATE_SHOULD_BE_OKAY);
 
-  return s;
+	suite_add_tcase(s, tc_core);
+
+	return s;
 }

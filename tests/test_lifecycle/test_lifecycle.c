@@ -1,6 +1,6 @@
-#include "test_lifecycle.h"
-
 #include <check.h>
+
+#include "test_lifecycle.h"
 
 Suite *
 lifecycle_suite(void)
@@ -14,7 +14,7 @@ lifecycle_suite(void)
 	tcase_add_test(tc_core, TEST_CUSTOM_ATTRIBUTES_INIT_SHOULD_BE_OKAY);
 	tcase_add_test(tc_core, TEST_MIN_STACK_POSSIBLE_SHOULD_BE_OKAY);
 
-        suite_add_tcase(s, tc_core);
+	suite_add_tcase(s, tc_core);
 
-        return s;
+	return s;
 }

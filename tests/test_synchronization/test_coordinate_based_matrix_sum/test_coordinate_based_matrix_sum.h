@@ -8,6 +8,6 @@ Suite *coordinate_suite(void);
 
 START_TEST(TEST_COORDINATE_SHOULD_BE_OKAY)
 {
-    coordinate_based_matrix_sum();
+	coordinate_based_matrix_sum();
 }
 END_TEST

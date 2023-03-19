@@ -1,17 +1,19 @@
-#include "test_quicksort.h"
-
 #include <check.h>
 
-Suite *quicksort_suite(void) {
-  Suite *s = NULL;
-  TCase *tc_core = NULL;
+#include "test_quicksort.h"
 
-  s = suite_create("quicksort");
-  tc_core = tcase_create("core");
+Suite *
+quicksort_suite(void)
+{
+	Suite *s = NULL;
+	TCase *tc_core = NULL;
 
-  tcase_add_test(tc_core, TEST_QUICKSORT_SHOULD_BE_OKAY);
+	s = suite_create("quicksort");
+	tc_core = tcase_create("core");
 
-  suite_add_tcase(s, tc_core);
+	tcase_add_test(tc_core, TEST_QUICKSORT_SHOULD_BE_OKAY);
 
-  return s;
+	suite_add_tcase(s, tc_core);
+
+	return s;
 }

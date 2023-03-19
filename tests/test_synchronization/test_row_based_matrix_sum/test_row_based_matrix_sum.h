@@ -8,6 +8,6 @@ Suite *row_suite(void);
 
 START_TEST(TEST_ROW_SHOULD_BE_OKAY)
 {
-    row_based_matrix_sum();
+	row_based_matrix_sum();
 }
 END_TEST
