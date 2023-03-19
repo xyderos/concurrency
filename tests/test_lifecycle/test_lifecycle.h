@@ -14,7 +14,7 @@ START_TEST(TEST_CUSTOM_ATTRIBUTES_INIT_SHOULD_BE_OKAY)
 
 	pthread_attr_t atr = init_attributes(PTHREAD_STACK_MIN + 0X5000);
 
-	res = pthread_create(&t, &atr, w, NULL);
+	res = pthread_create(&t, &atr, thread_attribute_worker, NULL);
 
 	ck_assert_int_eq(res, 0);
 
@@ -29,7 +29,7 @@ START_TEST(TEST_MIN_STACK_POSSIBLE_SHOULD_BE_OKAY)
 
 	pthread_attr_t atr = min_stack_possible();
 
-	res = pthread_create(&t, &atr, w, NULL);
+	res = pthread_create(&t, &atr, thread_attribute_worker, NULL);
 
 	ck_assert_int_eq(res, 0);
 

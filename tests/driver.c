@@ -10,7 +10,7 @@
 #include <sys/resource.h>
 
 #include "test_lifecycle/test_lifecycle.h"
-#include "test_synchronization/test_barrier/test_barrier.h"
+#include "test_synchronization/test_barrier_based_matrix_sum/test_barrier_based_matrix_sum.h"
 
 // in order to be able to run the program with setting scheduling requests
 // you need to interact with the system by setting limits
