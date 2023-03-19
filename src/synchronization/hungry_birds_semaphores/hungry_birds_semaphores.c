@@ -24,6 +24,9 @@ static int index_where_we_eat_from_the_bowl = 0;
 
 static int no_worms_in_the_bowl = 0;
 
+void *father(void *arg);
+void *birds(void *arg);
+
 static void put_a_worm_in_the_bowl(int value) {
   bowl_of_worms[index_where_we_fill_up_the_bowl] = value;
 
@@ -43,6 +46,8 @@ static int eat_a_worm_from_the_bowl() {
 }
 
 void *father(void *arg) {
+  // silence warnings
+  (void)arg;
   for (;;) {
     // there are no worms remaining and father must fill the plate
     if (!no_worms_in_the_bowl) {
