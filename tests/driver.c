@@ -27,7 +27,6 @@ setup_environment(void)
 
 	return setrlimit(RLIMIT_RTPRIO, &r);
 }
-
 int
 main(void)
 {
