@@ -98,9 +98,6 @@ Workflow
 * __As long as there are writers and are appended to the queue, the scheduling is in favor of them, writing needs to be done in order for a reader to be runnable__
 * __There is no priority between the readers__
 
-__RWlock__ is not __POSIX compatible and therefore not implemented__
-* Dont worry tho, I got you covered in the examples ;)
-
 __Priority Inheritance Mutexes__
 
 Assume a high prio thread is blocked from a lower prio thread, that is in turn block by a middle prio thread hogging the CPU
