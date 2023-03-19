@@ -1,3 +1,5 @@
+#include "bear_honey_bees_semaphores.h"
+
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
@@ -59,7 +61,7 @@ void *some_honeybees(void *arg) {
   }
 }
 
-int main() {
+int bear_honey_bees_semaphores(void) {
   pthread_attr_t attr;
   long i = 0;
 
@@ -79,4 +81,6 @@ int main() {
     pthread_create(&workerid[i], NULL, some_honeybees, (void *)i);
 
   for (i = 1; i <= number_of_honeybees; i++) pthread_join(workerid[i], NULL);
+
+  pthread_exit(EXIT_SUCCESS);
 }
