@@ -1,8 +1,8 @@
+#include "coordinate.h"
+
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include "coordinate.h"
 
 #define matrix_size 1000
 #define number_of_workers 10
