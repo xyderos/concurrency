@@ -78,7 +78,7 @@ pthread_attr_t min_stack_possible(void) {
 
 // do not do any actual work, as long as it is initialized its fine
 
-void *w(void *arg) {
+void *thread_attribute_worker(void *arg) {
   // disable compiler warnings
   (void)arg;
   pthread_exit(EXIT_SUCCESS);
