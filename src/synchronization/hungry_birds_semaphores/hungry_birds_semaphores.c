@@ -112,7 +112,7 @@ birds(void *arg)
 
 		// get the next position
 		//(other threads might finish the plate and ask for a refill so
-		//some birds
+		// some birds
 		// might eat the same number of worms eg thread 0 ate number 2
 		// and thread 3 ate number 2 as well)
 		position = index_where_we_eat_from_the_bowl;
