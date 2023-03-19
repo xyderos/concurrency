@@ -148,12 +148,5 @@ void *worker(void *arg) {
       }
     }
   }
-
-  printf("SUM : %d\n", total);
-
-  printf("MIN : %d at (%d,%d)\n", min, minimum_row, minimum_column);
-
-  printf("MAX : %d at (%d,%d)\n", max, maxRow, maximum_column);
-
   return EXIT_SUCCESS;
 }
