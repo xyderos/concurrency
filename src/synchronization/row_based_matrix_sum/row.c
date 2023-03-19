@@ -10,7 +10,7 @@
 static const unsigned int strip_size = matrix_size / number_of_workers;
 
 void barrier(void);
-void *worker(void *arg);
+void *row_worker(void *arg);
 
 static pthread_cond_t conditional;
 
@@ -50,7 +50,7 @@ int row_based_matrix_sum(void) {
   }
 
   for (l = 0; l < number_of_workers; l++) {
-    pthread_create(&workerid[l], &attr, worker, (void *)l);
+    pthread_create(&workerid[l], &attr, row_worker, (void *)l);
   }
 
   // wait for all the threads to finish the actual work
@@ -61,7 +61,7 @@ int row_based_matrix_sum(void) {
   pthread_exit(EXIT_SUCCESS);
 }
 
-void *worker(void *arg) {
+void *row_worker(void *arg) {
   unsigned long myid = (unsigned long)arg, j = 0, total = 0, row = 0;
 
   while (next_row < matrix_size) {
