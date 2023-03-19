@@ -10,6 +10,7 @@
 #include <sys/resource.h>
 
 #include "test_lifecycle/test_lifecycle.h"
+#include "test_synchronization/test_barrier/test_barrier.h"
 
 // in order to be able to run the program with setting scheduling requests
 // you need to interact with the system by setting limits
@@ -48,6 +49,7 @@ int main(void) {
 
   runner = srunner_create(s);
   srunner_add_suite(runner, lifecycle_suite());
+  srunner_add_suite(runner, barrier_suite());
 
   srunner_run_all(runner, CK_NORMAL);
   no_failed = srunner_ntests_failed(runner);
