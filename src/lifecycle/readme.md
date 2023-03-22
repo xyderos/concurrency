@@ -63,6 +63,22 @@ Should you pass any arguments to the thread routine, you need to initalize the _
 
 * Needed to control scheduling classes, cancellation, signals
 
+### __Initialize your data__
+
+Sometimes yuo might want to do some sort of initialization before starting the program (eg .ini section in libraries)
+
+The best way to do so is to have a thread calling a function (obviosuly locked) to check if initialization is complete
+
+* All the other calls to that will be __blocked__
+
+This function is called __once__
+
+Drawbacks:
+
+1) Keeping __global state__
+
+2) Might be expensive, will probably need a flag to indicate its done!
+
 ### Some notes
 
 * #### __It is good practise to never wait for a thread, use synchronization for getting the status__
