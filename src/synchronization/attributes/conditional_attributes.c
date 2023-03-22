@@ -1,4 +1,3 @@
-#include <bits/pthreadtypes.h>
 #include <pthread.h>
 
 #include "conditional_attributes.h"
