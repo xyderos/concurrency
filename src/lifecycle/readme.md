@@ -87,7 +87,21 @@ Drawbacks:
 
 * #### Although a thread can kill a thread, this should __never be the case__, the other thread might be holding locks and thus is __NOT POSIX COMPATIBLE__ (implement on your own)
 
-#### _Cancellation exists but it is not discussed in this part_
+### __A few notes on pthreads__
+
+* Pthreads are identified by the pthread_t within the system, each thread has a unique indentifier, you can compare them only by using __pthread_equal__
+
+* The __initial thread or main thread__ retains the behavior of a classic UNI process when main returns, that means that the process can terminate without letting the rest fo the threads to complete.
+
+* _You dont really need that_
+
+__Detaching a thread is basically nothing more than informing the system that when the thread is done, its resources can be reclaimed__
+
+* __Always detach your threads__, either in attributes or explicitly by calling the detach function
+
+* If you need to know its return value, __join from the parent thread__
+
+
 
 #### __A few practical notes on setting up threads policies in Linux and subsequently POSIX environments__
 

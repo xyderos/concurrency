@@ -56,6 +56,18 @@ There are two things you should do in general:
 
 There is guarantee that there is a priority based scheme in mutexes, it is perfectly valid a thread to acquire the lock even if qanother thread has been waiting for a longer time, in other words, __starvation__
 
+* __Never copy a mutex, its behavior is undefined__
+
+* Usually are either within the __file scope (static)__ or __extern if they are supposed to be used by other files__
+
+* Destroy the mutex when you are done, __meaning that no threads are blocked on the mutex__
+
+* __Trylock__ will either acquire the mutex or will return __EBUSY__
+
+* __Never unlock something that you didnt lock yourself__
+
+* Most of the mutexes usually spend time waiting, maybe splitting down the work to more mutexes might actually help to full utilize the CPU
+
 _They can also have a priority queue :)_
 
 * It is __absolutely illegal (although permitable)__ for a mutex to __acquire a lock and for another one to release it__, __never release a mutex from a different thread__, better take a look at __semaphores__
@@ -235,7 +247,28 @@ __Semaphores include a __mutex__ internally.__
 
 __The conditions on semaphores was arbitrary, you had to change the condition all the time__
 
+* Condition variables are __always associated with a mutex and some shared data__
+
+* __The mutex must always be locked when you wait and unlocked when you signal__
+
+* You must also __destroy the condition variable when no other thread is no longer using it
+
 As long as you can express a condition, you can use a __condition variable__
+
+Why?
+
+1) __Intercepted wakeups__
+
+Threads are __asynchronous__. Waking up froma condition variable means having the lock. What if some other thread acquired the mutex? Should have to wait but it might not if the predicate is true.
+
+2) __Loose predicates__
+
+For some reason, it might be better use approximations about the state instead of concrete values.
+
+3) __Spurious wakeups__
+
+This means that when you wait on a condition variable, the wait may
+(occasionally) return when no thread specifically broadcast or signaled that condition variable.
 
 Workflow:
 
