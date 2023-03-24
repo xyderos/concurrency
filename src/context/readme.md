@@ -102,7 +102,36 @@ Despite the cpu, cache and instruction set architecture, the __natural granulari
 
 When the computer supports multiple sets of granularities, the __compiler decides the actual granularity of a program__ by the instructions it produces. __This means that if you bring a 64 bit granule and you have an eight bit granule in the code, the operation is not atomic__
 
-
 3) __System granularity__
 
 * The OS should be responsible to provide __persistent granularity on the default settings the compiuler uses when generating object files__
+
+__In a multithreaded app, accessing concurrently data can exist  within the same granule can lead to word tearing__
+
+* update parts of it when this is a byte, word etc
+* The applications granularity is bigger than the granule you modify
+
+eg strcuts, unions, arrays
+
+* C can provide alignments
+
+Workarounds:
+
+_By changing the data_
+
+1) Add padding or wide data members to align to granularity
+2) Use the systems __actual granularity__
+
+_By keeping the data_
+
+1) __Use volatile to arrays or shared members of a struct__, and compile with __-strong-volatile__
+
+__You will then instruct the compiler access the data as atomic operations__
+
+__Use one mutex per data object__
+
+### __If a library lacks thread safety__
+
+1) Add a mutex to each block of unsafe code
+2) Use the global lock __pthread_lock_global_np()__ whenever calling unsafe routines
+2) Copy or use any static data the unsafe function provides
