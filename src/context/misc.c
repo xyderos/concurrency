@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include "misc.h"
+
 void *
 thread_sleep(void *arg)
 {
