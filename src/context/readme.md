@@ -39,3 +39,29 @@ Can execute three functions
 * Thread safe file reading functions
 
 #### __A lot of functions that are not thread safe have already been implemented by appending the _r suffix___
+
+### __Functional models__
+
+1) __Boss/Worker__
+
+* One thread is the __boss__, assigning tasks to __worker threads__
+* When the worker is __done__, it signals the boss that its done and waits to receive anoother task
+* Or the boss __can poll the worker to see if he is available to receive a task__
+
+A variation is the __work queue model__ aka __producer/consumer__
+
+eg a secretary at an office
+
+2) __Work Crew__
+
+* __Multiple threads work together in a single task__
+* The task __is divided into pieces__ and parts of it are done __in parallel__
+
+eg a working crew of cleaners in a building, __each one has its own job__
+
+3) __Pipeline__
+
+* Each task is split into smaller tasks that __each next step has a dependency on the previous one__
+* The basic difference with __work crew__ is that, we need to produce __multiple results__ (high throughput)
+
+eg Automoibile factory pipeline, __each part produces high throughput__
