@@ -1,6 +1,6 @@
 # Context
 
-Some general notes about the behavior of traditional processes in conjunction with pthreads.
+Some general notes about concurrent programming in general
 
 ### __Fork__
 
@@ -39,3 +39,99 @@ Can execute three functions
 * Thread safe file reading functions
 
 #### __A lot of functions that are not thread safe have already been implemented by appending the _r suffix___
+
+### __Functional models__
+
+1) __Boss/Worker__
+
+* One thread is the __boss__, assigning tasks to __worker threads__
+* When the worker is __done__, it signals the boss that its done and waits to receive anoother task
+* Or the boss __can poll the worker to see if he is available to receive a task__
+
+A variation is the __work queue model__ aka __producer/consumer__
+
+eg a secretary at an office
+
+2) __Work Crew__
+
+* __Multiple threads work together in a single task__
+* The task __is divided into pieces__ and parts of it are done __in parallel__
+
+eg a working crew of cleaners in a building, __each one has its own job__
+
+3) __Pipeline__
+
+* Each task is split into smaller tasks that __each next step has a dependency on the previous one__
+* The basic difference with __work crew__ is that, we need to produce __multiple results__ (high throughput)
+
+eg Automoibile factory pipeline, __each part produces high throughput__
+
+### __Scheduling issues__
+
+* Just because you set real time scheduling and assigned high priorities, it __doesnt mean its faster__, overhead exists especially when 3rd party libraries come into place
+
+* Multiple priorities and policies __will drastically increase the complexity of the program__, might cost performance also
+
+#### __Priority inversion__
+
+* When three or more threads __block the thread with the highest priority__
+
+_eg top prio thread waits for a resource locked from a low prio thread while a mid prio thread is running_
+
+Workarounds:
+
+1) Associate a priority, __as high as the highest prio a thread can take with each resource and force any thread that using this object to increase its priority to the same as the associated resource__
+
+2) Use the default throughput scheduling policy, __ensures fairness and avoids starvation__
+
+#### __In order to achieve real time scheduling, you need to run with root privileges__
+
+### __Granularity__
+
+__The smallest storage unit a machine can load/store in an instruction__
+
+* Since data race conditions can occur, you can apply some techniques to avoid __granularity race conditions__ based on __word tearing__
+
+Three different types of granularities
+
+1) __Natural granularity__
+
+Despite the cpu, cache and instruction set architecture, the __natural granularity depends on the organization of the memory and buses__ eg an eight bit processor can process 8 bits, but the buss can transfer 32 or 64 bit memory granules
+
+2) __Actual granularity__
+
+When the computer supports multiple sets of granularities, the __compiler decides the actual granularity of a program__ by the instructions it produces. __This means that if you bring a 64 bit granule and you have an eight bit granule in the code, the operation is not atomic__
+
+3) __System granularity__
+
+* The OS should be responsible to provide __persistent granularity on the default settings the compiuler uses when generating object files__
+
+__In a multithreaded app, accessing concurrently data can exist  within the same granule can lead to word tearing__
+
+* update parts of it when this is a byte, word etc
+* The applications granularity is bigger than the granule you modify
+
+eg strcuts, unions, arrays
+
+* C can provide alignments
+
+Workarounds:
+
+_By changing the data_
+
+1) Add padding or wide data members to align to granularity
+2) Use the systems __actual granularity__
+
+_By keeping the data_
+
+1) __Use volatile to arrays or shared members of a struct__, and compile with __-strong-volatile__
+
+__You will then instruct the compiler access the data as atomic operations__
+
+__Use one mutex per data object__
+
+### __If a library lacks thread safety__
+
+1) Add a mutex to each block of unsafe code
+2) Use the global lock __pthread_lock_global_np()__ whenever calling unsafe routines
+2) Copy or use any static data the unsafe function provides
