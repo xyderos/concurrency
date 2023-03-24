@@ -1,6 +1,6 @@
 # Context
 
-Some general notes about the behavior of traditional processes in conjunction with pthreads.
+Some general notes about concurrent programming in general
 
 ### __Fork__
 
@@ -65,3 +65,44 @@ eg a working crew of cleaners in a building, __each one has its own job__
 * The basic difference with __work crew__ is that, we need to produce __multiple results__ (high throughput)
 
 eg Automoibile factory pipeline, __each part produces high throughput__
+
+### __Scheduling issues__
+
+* Just because you set real time scheduling and assigned high priorities, it __doesnt mean its faster__, overhead exists especially when 3rd party libraries come into place
+
+* Multiple priorities and policies __will drastically increase the complexity of the program__, might cost performance also
+
+#### __Priority inversion__
+
+* When three or more threads __block the thread with the highest priority__
+
+_eg top prio thread waits for a resource locked from a low prio thread while a mid prio thread is running_
+
+Workarounds:
+
+1) Associate a priority, __as high as the highest prio a thread can take with each resource and force any thread that using this object to increase its priority to the same as the associated resource__
+
+2) Use the default throughput scheduling policy, __ensures fairness and avoids starvation__
+
+#### __In order to achieve real time scheduling, you need to run with root privileges__
+
+### __Granularity__
+
+__The smallest storage unit a machine can load/store in an instruction__
+
+* Since data race conditions can occur, you can apply some techniques to avoid __granularity race conditions__ based on __word tearing__
+
+Three different types of granularities
+
+1) __Natural granularity__
+
+Despite the cpu, cache and instruction set architecture, the __natural granularity depends on the organization of the memory and buses__ eg an eight bit processor can process 8 bits, but the buss can transfer 32 or 64 bit memory granules
+
+2) __Actual granularity__
+
+When the computer supports multiple sets of granularities, the __compiler decides the actual granularity of a program__ by the instructions it produces. __This means that if you bring a 64 bit granule and you have an eight bit granule in the code, the operation is not atomic__
+
+
+3) __System granularity__
+
+* The OS should be responsible to provide __persistent granularity on the default settings the compiuler uses when generating object files__
