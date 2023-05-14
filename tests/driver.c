@@ -9,11 +9,6 @@
 #include <string.h>
 
 #include "driver.h"
-#include "test_lifecycle/test_lifecycle.h"
-#include "test_synchronization/test_barrier_based_matrix_sum/test_barrier_based_matrix_sum.h"
-#include "test_synchronization/test_coordinate_based_matrix_sum/test_coordinate_based_matrix_sum.h"
-#include "test_synchronization/test_quicksort/test_quicksort.h"
-#include "test_synchronization/test_row_based_matrix_sum/test_row_based_matrix_sum.h"
 
 // in order to be able to run the program with setting scheduling requests
 // you need to interact with the system by setting limits
@@ -59,6 +54,14 @@ main(void)
 	srunner_add_suite(runner, coordinate_suite());
 	srunner_add_suite(runner, row_suite());
 	srunner_add_suite(runner, quicksort_suite());
+	srunner_add_suite(runner, cigarette_smokers_suite());
+	srunner_add_suite(runner, dining_savages_suite());
+	srunner_add_suite(runner, fifo_barbershop_suite());
+	srunner_add_suite(runner, hilzers_barbershop_suite());
+	srunner_add_suite(runner, linked_list_suite());
+	srunner_add_suite(runner, mutex_no_starve_suite());
+	srunner_add_suite(runner, queue_suite());
+	srunner_add_suite(runner, random_barbershop_suite());
 
 	srunner_run_all(runner, CK_NORMAL);
 	no_failed = srunner_ntests_failed(runner);
