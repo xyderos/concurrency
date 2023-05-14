@@ -8,6 +8,7 @@
 #include "test_synchronization/test_fifo_barbershop/test_fifo_barbershop.h"
 #include "test_synchronization/test_hilzers_barbershop/test_hilzers_barbershop.h"
 #include "test_synchronization/test_linked_list/test_linked_list.h"
+#include "test_synchronization/test_locks/test_locks.h"
 #include "test_synchronization/test_mutex_no_starve/test_mutex_no_starve.h"
 #include "test_synchronization/test_queue/test_queue.h"
 #include "test_synchronization/test_quicksort/test_quicksort.h"

@@ -62,6 +62,7 @@ main(void)
 	srunner_add_suite(runner, mutex_no_starve_suite());
 	srunner_add_suite(runner, queue_suite());
 	srunner_add_suite(runner, random_barbershop_suite());
+	srunner_add_suite(runner, locks_suite());
 
 	srunner_run_all(runner, CK_NORMAL);
 	no_failed = srunner_ntests_failed(runner);
